@@ -49,3 +49,5 @@ function restart(req, res){
     Object.keys(files).forEach(vPath => delete files[vPath]); 
     res.status(200).send({ message : 'File cache cleared.'}); // Acknowledge restart request
 }
+
+module.exports = init;
