@@ -6,8 +6,8 @@
  * main app, instead of being read each time someone requests it.
 */
 
-// REMOVE BEFORE FLIGHT
-require('dotenv').config();
+// Setup enviroment
+require('dotenv').config({ path : `.env.${process.env.NODE_ENV}` })
 
 // Setup modules
 const express = require('express');
