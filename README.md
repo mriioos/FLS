@@ -29,10 +29,13 @@ Used to get a previously loaded file, returns the contents of the solicited file
 
 *POST /(vPath)*
 Used to post or update a file and assign its content to that virtual path (which is just a key to find it).
-**IMPORTANT!** The body must be an stringified JSON with this structure:
+**IMPORTANT!** 
+The body must be an stringified JSON with this structure:
 {
-    content : file_contents_to_be_cached
+    content : string_to_be_cached
 }
+And the request must include the header:
+*'Content-Type' : 'application/json'*
 
 *PUT /restart*
 This instruction is used to uncache all files on runtime. Has the same effect as restarting the service.
