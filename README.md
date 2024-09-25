@@ -45,10 +45,6 @@ This service is meant to run on a local enviroment, such as a LAN network or a l
 - Configure a user dedicated to executing this service
     - Grant no privileges to anything but this service
 
-- Remove development elements if containerizing
-    - .env file
-    - require('dotenv').config() from app.js
-
 **3. Start Up**
 This service also makes use of some enviroment variables (My intention was to containerize it).
 The examples givven are the default values for each env variable.
@@ -67,3 +63,10 @@ The allowed origin IP addresses for the PUT method, separated by comma ','.
 Recomended localhost
 
 Note that IPv6 and IPv4 ips must be included, and that common names like localhost wont't work -- only explicit IP addresses will.
+
+**4. Build**
+*APP_VERSION* Sets the *NODE_ENV* and other values. Valid values are *production* and *development*.
+*NODE_VERSION* Sets the version of node to be used.
+
+Example (values are the default): 
+*docker build --build-arg APP_VERSION=production --build-arg NODE_VERSION=18 -t my-node-app .*
