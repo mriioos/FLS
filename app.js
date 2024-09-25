@@ -11,7 +11,6 @@ require('dotenv').config();
 
 // Setup modules
 const express = require('express');
-const bodyParser = require('body-parser');
 
 // Parse app config
 const config = {
@@ -22,6 +21,8 @@ const config = {
         put : process.env.PUT_ORIGIN?.split(',') || ['127.0.0.1','::1']     // Accepted IP address on PUT
     }
 };
+
+console.log(config);
 
 /**
  * Object that stores file data and metadata.
@@ -38,7 +39,7 @@ const app = express();
 
 // Configure middleware
 app.use(middleware.reqFilter);
-app.use(bodyParser.json({ limit : '2mb' }));
+app.use(express.json({ limit : '2mb' }));
 
 // Configure paths
 app.get('/*', api.serve);           // File serving handler

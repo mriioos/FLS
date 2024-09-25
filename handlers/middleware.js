@@ -23,10 +23,12 @@ function reqFilter(req, res, next){
 
     // Check if the origin IP is accepted for that method
     if(config.origin[method]?.includes(reqIP)){
+        console.log("IP filter passed");
         next();
     }
     else{
         res.status(403).send('Forbidden: Access is denied.');
+        console.log("IP filter not passed");
     }
 }
 

@@ -21,10 +21,12 @@ function serve(req, res){
     if(file){
         res.write(file);
         res.end();
+        console.log("File found cached");
     }
     else{
         res.status(404);
         res.end();
+        console.log("File not found cached");
     }
 }
 
@@ -33,7 +35,8 @@ function cache(req, res){
     res.setHeader('Cache-Control', 'no-cache, no-store');
 
     // Check if req.body.content is defined
-    if (!req.body || !req.body.content) {
+    console.log(req.body);
+    if (!req.body?.content) {
         res.status(400).send({ message: 'Bad Request: Content is required' });
         return;
     }
