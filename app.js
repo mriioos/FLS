@@ -19,10 +19,13 @@ const config = {
         get : process.env.GET_ORIGIN?.split(',') || ['127.0.0.1','::1'],    // Accepted IP address on GET
         post : process.env.POST_ORIGIN?.split(',') || ['127.0.0.1','::1'],  // Accepted IP address on POST
         put : process.env.PUT_ORIGIN?.split(',') || ['127.0.0.1','::1']     // Accepted IP address on PUT
-    }
+    },
+    token : process.env.API_TOKEN
 };
 
-console.log(config);
+if(process.env.NODE_ENV == 'development'){
+    console.log(config);
+}
 
 /**
  * Object that stores file data and metadata.
@@ -39,6 +42,7 @@ const app = express();
 
 // Configure middleware
 app.use(middleware.reqFilter);
+app.use(middleware.clientFilter);
 app.use(express.json({ limit : '2mb' }));
 
 // Configure paths

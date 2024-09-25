@@ -5,7 +5,8 @@ function init(appConfig, filesObject){
     files = filesObject;
 
     return {
-        reqFilter
+        reqFilter,
+        clientFilter
     }
 }
 
@@ -30,6 +31,17 @@ function reqFilter(req, res, next){
         res.status(403).send('Forbidden: Access is denied.');
         console.log("IP filter not passed");
     }
+}
+
+function clientFilter(req, res, next){
+
+    // Check that the Client-Token was provided
+    if(!req.headers['Client-Token']){
+        res.status(403).send({ message : 'Forbidden'});
+        return;
+    }
+
+    next();
 }
 
 module.exports = init;

@@ -26,19 +26,32 @@ This was very convinient since my main reason of having to process files was to 
 **1. Methods**
 *GET /(vPath)*
 Used to get a previously loaded file, returns the contents of the solicited file.
+**IMPORTANT!** 
+The request must include the headers:
+*'Content-Type' : 'application/json'*
+*'Client-Token' : '(Your client token)'*
 
 *POST /(vPath)*
-Used to post or update a file and assign its content to that virtual path (which is just a key to find it).
+Used to post or update a file and assign its content to that virtual path asociated with a client.
 **IMPORTANT!** 
 The body must be an stringified JSON with this structure:
 {
     content : string_to_be_cached
 }
-And the request must include the header:
+And the request must include the headers:
 *'Content-Type' : 'application/json'*
+*'Client-Token' : '(Your client token)'*
+
+Note that if you POST a file at /index, and then you try to POST another file at /index/subdirectory, the first file will be lost due that internally, each part of the path is a nested key. 
+I strongly recommend you add the extension to distinguish files from directories like the example I provided earlier.
 
 *PUT /restart*
-This instruction is used to uncache all files on runtime. Has the same effect as restarting the service.
+This instruction is used to uncache all files asociated with a client on runtime.
+**IMPORTANT!** 
+The request must include the header:
+*'Client-Token' : '(Your client token)'*
+
+Note that a client token or an api token can be a string of any length, if two services share a client token, they will also share the cached files (Which can be convenient for a cluster of the same application).
 
 **2. Before deployment**
 This service is meant to run on a local enviroment, such as a LAN network or a localhost, please follow basic safety configurations (And all configurations you need).
@@ -61,6 +74,9 @@ The allowed origin IP addresses for the POST method, separated by comma ','.
 *PUT_ORIGIN=127.0.0.1,::1*
 The allowed origin IP addresses for the PUT method, separated by comma ','.
 Recomended localhost
+
+*API_TOKEN=FFFFFF*
+A secret string of any length that must be provided when /restart is fetched.
 
 Note that IPv6 and IPv4 ips must be included, and that common names like localhost wont't work -- only explicit IP addresses will.
 
