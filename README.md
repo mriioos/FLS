@@ -65,13 +65,13 @@ The examples givven are the default values for each env variable.
 *LISTEN_PORT=3001*
 The port where the app will listen.
 
-*GET_ORIGIN=127.0.0.1,::1*
+*GET_ORIGIN=::ffff:172.17.0.1,127.0.0.1,::1*
 The allowed origin IP addresses for the GET method, separated by comma ','.
 
-*POST_ORIGIN=127.0.0.1,::1*
+*POST_ORIGIN=::ffff:172.17.0.1,127.0.0.1,::1*
 The allowed origin IP addresses for the POST method, separated by comma ','.
 
-*PUT_ORIGIN=127.0.0.1,::1*
+*PUT_ORIGIN=::ffff:172.17.0.1,127.0.0.1,::1*
 The allowed origin IP addresses for the PUT method, separated by comma ','.
 Recomended localhost.
 

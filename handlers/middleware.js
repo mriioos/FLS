@@ -20,7 +20,10 @@ function reqFilter(req, res, next){
 
     // Get method and origin IP
     const method = req.method.toLowerCase();
+
     const reqIP = (req.ip || req.connection.remoteAddress).toLowerCase();
+
+    console.log(`Recived IP : ${reqIP}`);
 
     // Check if the origin IP is accepted for that method
     if(config.origin[method]?.includes(reqIP)){
