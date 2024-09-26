@@ -1,5 +1,5 @@
 # Get if production or development version should be built
-ARG APP_VERSION=development
+ARG APP_VERSION='development'
 
 # Specify the base image
 ARG NODE_VERSION=18
@@ -19,6 +19,9 @@ COPY . .
 
 # Expose the port your app runs on
 EXPOSE 3001/tcp
+
+# Re-declare ARG before using in ENV
+ARG APP_VERSION
 
 # Set environment variables
 ENV NODE_ENV=${APP_VERSION}

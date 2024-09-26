@@ -2,7 +2,10 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "ezdeepnest": "^1.0.2",
     "handlebars": "^4.7.8",
     "path": "^0.12.7"
-  }
+  },
+  "name": "",
+  "version": ""
 }
