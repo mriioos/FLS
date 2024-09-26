@@ -26,21 +26,22 @@ function reqFilter(req, res, next){
     console.log(`Recived IP : ${reqIP}`);
 
     // Check if the origin IP is accepted for that method
+    console.log(config.origin[method]);
     if(config.origin[method]?.includes(reqIP)){
         console.log("IP filter passed");
         next();
     }
     else{
-        res.status(403).send('Forbidden: Access is denied.');
+        res.status(403).send('Forbidden: IP access is denied.');
         console.log("IP filter not passed");
     }
 }
 
 function clientFilter(req, res, next){
 
-    // Check that the Client-Token was provided
-    if(!req.headers['Client-Token']){
-        res.status(403).send({ message : 'Forbidden'});
+    // Check that the client-token was provided
+    if(!req.headers['client-token']){
+        res.status(401).send({ message : 'Unidentified: Client-Token not found'});
         return;
     }
 

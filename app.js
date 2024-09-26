@@ -9,16 +9,18 @@
 // Setup enviroment
 require('dotenv').config({ path : `.env.${process.env.NODE_ENV}` })
 
+console.log(`Mode : ${process.env.NODE_ENV}`);
+
 // Setup modules
 const express = require('express');
 
 // Parse app config
 const config = {
-    port : process.env.LISTEN_PORT || 3001,                                 // 3001
+    port : process.env.LISTEN_PORT || 3001,                                                       // 3001
     origin : {
-        get : process.env.GET_ORIGIN?.split(',') || ['127.0.0.1','::1'],    // Accepted IP address on GET
-        post : process.env.POST_ORIGIN?.split(',') || ['127.0.0.1','::1'],  // Accepted IP address on POST
-        put : process.env.PUT_ORIGIN?.split(',') || ['127.0.0.1','::1']     // Accepted IP address on PUT
+        get : process.env.GET_ORIGIN?.split(',') || ['::ffff:172.17.0.1', '127.0.0.1', '::1'],    // Accepted IP address on GET
+        post : process.env.POST_ORIGIN?.split(',') || ['::ffff:172.17.0.1', '127.0.0.1', '::1'],  // Accepted IP address on POST
+        put : process.env.PUT_ORIGIN?.split(',') || ['::ffff:172.17.0.1', '127.0.0.1', '::1']     // Accepted IP address on PUT
     }
 };
 

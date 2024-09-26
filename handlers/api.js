@@ -17,11 +17,13 @@ function serve(req, res){
     res.setHeader('Cache-Control', 'no-cache, no-store');
     
     // Get client token
-    const clientToken = req.headers['Client-Token'];
+    const clientToken = req.headers['client-token'];
 
     // Check if file is loaded
     const clientFiles = files[clientToken];
-    const file = clientFiles.get(req.path);
+    const file = ezdn.get(clientFiles, req.path);
+
+    console.log(files);
 
     if(file){
         res.write(file);
@@ -38,7 +40,7 @@ function cache(req, res){
     res.setHeader('Cache-Control', 'no-cache, no-store');
     
     // Get client token
-    const clientToken = req.headers['Client-Token'];
+    const clientToken = req.headers['client-token'];
 
     // Check if req.body.content is defined
     if (!req.body?.content) {
@@ -46,9 +48,14 @@ function cache(req, res){
         return;
     }
     
+    // Create client workspace if not exists
+    files[clientToken] = files[clientToken] ? files[clientToken] : {};
+
     // Save file
     const clientFiles = files[clientToken];
-    clientFiles.set(req.path, req.body.content);
+    ezdn.set(clientFiles, req.path, req.body.content);
+    
+    console.log(files);
 
     // Send a response confirming the save
     res.send({ message: 'File saved successfully', path : req.path });
@@ -57,7 +64,7 @@ function cache(req, res){
 function restart(req, res){ 
 
     // Get client token 
-    const clientToken = req.headers['Client-Token'];
+    const clientToken = req.headers['client-token'];
 
     // Uncache all files for that client
     delete files[clientToken];
