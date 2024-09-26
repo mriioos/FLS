@@ -75,9 +75,6 @@ The allowed origin IP addresses for the POST method, separated by comma ','.
 The allowed origin IP addresses for the PUT method, separated by comma ','.
 Recomended localhost
 
-*API_TOKEN=FFFFFF*
-A secret string of any length that must be provided when /restart is fetched.
-
 Note that IPv6 and IPv4 ips must be included, and that common names like localhost wont't work -- only explicit IP addresses will.
 
 **4. Build**
