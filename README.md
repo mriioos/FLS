@@ -73,7 +73,7 @@ The allowed origin IP addresses for the POST method, separated by comma ','.
 
 *PUT_ORIGIN=127.0.0.1,::1*
 The allowed origin IP addresses for the PUT method, separated by comma ','.
-Recomended localhost
+Recomended localhost.
 
 Note that IPv6 and IPv4 ips must be included, and that common names like localhost wont't work -- only explicit IP addresses will.
 
