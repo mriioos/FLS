@@ -21,7 +21,22 @@ function serve(req, res){
 
     // Check if file is loaded
     const workspace = files[clientToken];
-    const file = ezdn.get(workspace.data, req.path);
+
+    // Get parent path and key
+    const parentPath = req.path.split('/');
+    const key = parentPath.pop(); // We need to initilize it before we use the parent path string
+
+    // Construct file meta data object
+    const meta = {
+        parent : ezdn.get(workspace.data, parentPath.join('/')),
+        key : key
+    }
+
+    // Get file data
+    const file = meta.parent[meta.key];
+    
+    // Renew file priority in cache
+    renewMeta(workspace, meta);
 
     console.log(files);
 
@@ -60,23 +75,29 @@ function cache(req, res){
     // Access client workspace
     const workspace = files[clientToken];
 
-    // Store file data
-    const newMeta = ezdn.set(workspace.data, req.path, data);
+    // Store file data and retrieve meta data
+    const meta = ezdn.set(workspace.data, req.path, data);
 
-    // Remove old records of this file (If exists)
-    workspace.queue = workspace.queue.filter((storedMeta) => !equalMeta(storedMeta, newMeta));
-    
-    // Renew file priority on the file queue
-    workspace.queue.push(newMeta);
-
-    // Remove less used file (if queue > 10)
-    if(workspace.queue.length > config.files.max_queue) workspace.queue.shift();
+    // Renew file priority in cache
+    renewMeta(workspace, meta);
     
     // Log this user's files
     console.log(files);
 
     // Send a response confirming the save
     res.send({ message: 'File saved successfully', path : req.path });
+}
+
+function renewMeta(workspace, meta){
+
+    // Remove old records of this file (If exists)
+    workspace.queue = workspace.queue.filter((storedMeta) => !equalMeta(storedMeta, meta));
+    
+    // Renew file priority on the file queue
+    workspace.queue.push(meta);
+
+    // Remove less used file (if queue > 10)
+    if(workspace.queue.length > config.files.max_queue) workspace.queue.shift();
 }
 
 function equalMeta(storedMeta, newMeta){
