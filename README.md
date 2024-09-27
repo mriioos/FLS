@@ -77,9 +77,21 @@ Recomended localhost.
 
 Note that IPv6 and IPv4 ips must be included, and that common names like localhost wont't work -- only explicit IP addresses will.
 
+*MAX_FILE_SIZE_MB=2*
+Max body size of a request that FLS accepts in megabytes, which by extension, is the max size of the data that can be stored in one space of a user (See MAX_FILE_QUEUE_LENGTH).
+
+*MAX_FILE_QUEUE_LENGTH=10*
+The maximum amount of files (data spaces) that a user can have cached at the same time, when the number of data spaces available for a user is exceded, the last file gets deleted. In a more technical manner it uses Least Recently Used (LRU) strategy for a users memory management.
+
+Note that total memory storage for a user can be calculated like:
+MAX_FILE_SIZE_MB x MAX_FILE_QUEUE_LENGTH. 
+
 **4. Build**
-*APP_VERSION* Sets the *NODE_ENV* and other values. Valid values are *production* and *development*.
-*NODE_VERSION* Sets the version of node to be used.
+*APP_VERSION=development*
+Sets the *NODE_ENV* and other values. Valid values are *production* and *development*.
+
+*NODE_VERSION=18* 
+Sets the version of node to be used.
 
 Example (values are the default): 
 *docker build --build-arg APP_VERSION=production --build-arg NODE_VERSION=18 -t my-node-app .*

@@ -40,14 +40,14 @@ let files = {};
 
 // Utility modules
 const middleware = require('./handlers/middleware.js')(config, files);
-const api = require('./handlers/api.js')(config, files);
+const api = require('./handlers/api.v2.js')(config, files);
 
 // Create app
 const app = express();
 
 // Configure middleware
 app.use(...Object.values(middleware));
-app.use(express.json({ limit : `${config.files.max_sizes}mb` }));
+app.use(express.json({ limit : `${config.files.max_size}mb` }));
 
 // Configure paths
 app.get('/*', api.serve);           // File serving handler
