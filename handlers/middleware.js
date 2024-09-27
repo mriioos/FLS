@@ -5,9 +5,24 @@ function init(appConfig, filesObject){
     files = filesObject;
 
     return {
+        printInfo,
         reqFilter,
         clientFilter
     }
+}
+
+/**
+ * Debug function that gathers info about the arriving request
+ * @param {object} req Object provided by nodejs/express
+ * @param {object} res Object provided by nodejs/express
+ * @param {function} next Function to execute
+ */
+function printInfo(req, res, next){
+    console.log('-');
+    console.log(`${req.method} ${req.path}`);
+    console.log(`Recived IP : ${(req.ip || req.connection.remoteAddress)}`);
+
+    next();
 }
 
 /**
@@ -23,10 +38,7 @@ function reqFilter(req, res, next){
 
     const reqIP = (req.ip || req.connection.remoteAddress).toLowerCase();
 
-    console.log(`Recived IP : ${reqIP}`);
-
     // Check if the origin IP is accepted for that method
-    console.log(config.origin[method]);
     if(config.origin[method]?.includes(reqIP)){
         console.log("IP filter passed");
         next();

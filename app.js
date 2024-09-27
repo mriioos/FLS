@@ -21,6 +21,10 @@ const config = {
         get : process.env.GET_ORIGIN?.split(',') || ['::ffff:172.17.0.1', '127.0.0.1', '::1'],    // Accepted IP address on GET
         post : process.env.POST_ORIGIN?.split(',') || ['::ffff:172.17.0.1', '127.0.0.1', '::1'],  // Accepted IP address on POST
         put : process.env.PUT_ORIGIN?.split(',') || ['::ffff:172.17.0.1', '127.0.0.1', '::1']     // Accepted IP address on PUT
+    },
+    files : {
+        max_size : parseInt(process.env.MAX_FILE_SIZE_MB || '2'),
+        max_queue : parseInt(process.env.MAX_FILE_QUEUE_LENGTH || '10')
     }
 };
 
@@ -42,9 +46,8 @@ const api = require('./handlers/api.js')(config, files);
 const app = express();
 
 // Configure middleware
-app.use(middleware.reqFilter);
-app.use(middleware.clientFilter);
-app.use(express.json({ limit : '2mb' }));
+app.use(...Object.values(middleware));
+app.use(express.json({ limit : `${config.files.max_sizes}mb` }));
 
 // Configure paths
 app.get('/*', api.serve);           // File serving handler
