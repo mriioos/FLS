@@ -80,7 +80,7 @@ Note that IPv6 and IPv4 ips must be included, and that common names like localho
 *MAX_FILE_SIZE_MB=1*
 Max body size of a request that FLS accepts in megabytes, which by extension, is the max size of the data that can be stored in one space of a user (See MAX_FILE_QUEUE_LENGTH).
 
-*MAX_FILE_QUEUE_LENGTH=20*
+*MAX_FILE_QUEUE_LENGTH=30*
 The maximum amount of files (data spaces) that a user can have cached at the same time, when the number of data spaces available for a user is exceded, the last file gets deleted. In a more technical manner it uses Least Recently Used (LRU) strategy for a users memory management.
 
 Note that total memory storage for a user can be calculated like:
