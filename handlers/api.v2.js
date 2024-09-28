@@ -19,17 +19,32 @@ function serve(req, res){
     // Get client token
     const clientToken = req.headers['client-token'];
 
-    // Check if file is loaded
+    // Check if file is loaded //
+    
+    // Check if client has a workspace
     const workspace = files[clientToken];
+    if(!workspace){
+        console.log("No user records found");
+        res.status(404);
+        res.end();
+        return;
+    }
 
     // Get parent path and key
     const parentPath = req.path.split('/');
-    const key = parentPath.pop(); // We need to initilize it before we use the parent path string
+    const key = parentPath.pop(); // We need to initilize the key before we use the parent path string (Because we need to pop the last element in order to get just the parent path without the final key)
 
     // Construct file meta data object
     const meta = {
         parent : ezdn.get(workspace.data, parentPath.join('/')),
         key : key
+    }
+
+    if(!meta.parent){
+        console.log("File not found");
+        res.status(404);
+        res.end();
+        return;
     }
 
     // Get file data
@@ -38,13 +53,16 @@ function serve(req, res){
     // Renew file priority in cache
     renewMeta(workspace, meta);
 
-    console.log(files);
+    // Log this user's workspace
+    printWorkspace(workspace, clientToken);
 
     if(file){
+        console.log('Found');
         res.write(file);
         res.end();
     }
     else{
+        console.log('File not found');
         res.status(404);
         res.end();
     }
@@ -59,7 +77,11 @@ function cache(req, res){
 
     // Check if req.body.content is defined
     if (!req.body?.content) {
-        res.status(400).send({ message: 'Bad Request: Content is required' });
+        console.log("Body has no content");
+        res.status(400).send({ 
+            message: 'Bad Request: Content is required',
+            path : req.path
+        });
         return;
     }
 
@@ -81,8 +103,8 @@ function cache(req, res){
     // Renew file priority in cache
     renewMeta(workspace, meta);
     
-    // Log this user's files
-    console.log(files);
+    // Log this user's workspace
+    printWorkspace(workspace, clientToken);
 
     // Send a response confirming the save
     res.send({ message: 'File saved successfully', path : req.path });
@@ -124,6 +146,19 @@ function restart(req, res){
 
     // Acknowledge restart request
     res.status(200).send({ message : 'File cache cleared.'}); 
+}
+
+function printWorkspace(workspace, clientToken){
+    
+    console.log(`${clientToken} workspace : `);
+    console.log(JSON.stringify(workspace, (key, value) => {
+        if(key === "queue") return `[${value.length}/${config.files.max_queue}]`;
+
+        if (typeof value === 'object' && value !== null) {
+          return value;  // Keep objects as they are
+        }
+        return '[File Data]';  // Replace non-object values with '[File Data]'
+    }, 2));
 }
 
 module.exports = init;
